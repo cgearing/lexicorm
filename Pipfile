@@ -5,10 +5,12 @@ name = "pypi"
 
 [packages]
 sqlalchemy = "*"
+"flake8" = "*"
 
 [dev-packages]
 behave = "*"
 pyhamcrest = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.7"
