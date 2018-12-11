@@ -1,6 +1,8 @@
 from typing import Dict
 
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from sqlalchemy.inspection import inspect
+from sqlalchemy.orm.collections import InstrumentedList
 
 
 def model_to_dict(sqlalchemy_model: DeclarativeMeta) -> Dict:
@@ -11,4 +13,15 @@ def model_to_dict(sqlalchemy_model: DeclarativeMeta) -> Dict:
     """
     if sqlalchemy_model is None:
         return {}
-    return sqlalchemy_model.__dict__
+
+    result = {}
+
+    attrs = inspect(sqlalchemy_model).attrs
+
+    for attr in attrs:
+        if type(attr.value) == InstrumentedList:
+            result[attr.key] = []
+        else:
+            result[attr.key] = attr.value
+
+    return result
