@@ -1,7 +1,7 @@
 Feature: model_to_dict
   Scenario: calling model_to_dict on nothing
     Given I have no database model
-    When I call model_to_dict on the model
+    When I call model_to_dict on the model "None"
     Then I get an empty dictionary as the result
 
   Scenario: calling model_to_dict on a basic model

@@ -12,7 +12,10 @@ def no_model(context):
 
 @when(u'I call model_to_dict on the model "{model_name}"')
 def model_dict_on_model(context, model_name):
-    model = getattr(context, model_name)
+    if model_name != 'None':
+        model = getattr(context, model_name)
+    else:
+        model = context.model
     context.result = model_to_dict(model)
 
 
