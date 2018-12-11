@@ -41,6 +41,22 @@ def get_fixtures() -> Mapping[str, Union[Band, Musician]]:
 
     musician = Musician(given_name='Jimi',
                         last_name='Hendrix',
+                        instrument='Guitar')
+
+    fixtures['musician'] = musician
+
+    return fixtures
+
+
+def get_fixtures_with_relationship() -> Mapping[str, Union[Band, Musician]]:
+    fixtures = {}
+
+    band = Band(name='Band Of Gypsys', genre='Rock')
+
+    fixtures['band'] = band
+
+    musician = Musician(given_name='Jimi',
+                        last_name='Hendrix',
                         instrument='Guitar',
                         bands=[band])
 
