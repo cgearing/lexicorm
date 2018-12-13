@@ -8,7 +8,7 @@ from sqlalchemy.orm.collections import InstrumentedList
 def model_to_dict(sqlalchemy_model: DeclarativeMeta) -> Dict:
     """
     sqlalchemy_model: A SQLAlchemy model
-    :returns An dictionary representation of the SQLAlchemy Model
+    :returns q dictionary representation of the SQLAlchemy Model
 
     """
     if sqlalchemy_model is None:
