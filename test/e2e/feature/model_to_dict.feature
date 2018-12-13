@@ -12,4 +12,5 @@ Feature: model_to_dict
   Scenario: calling model_to_dict on a model with a relationship
     Given I have a musician with a related band
     When I call model_to_dict on the model "musician"
-    Then I get a dictionary with a key "bands" with the value "The Band of Gypsys"
+    Then I get a dictionary with a key "bands" that is a list
+    And one of the objects in the "bands" list contains the key "name" with the value "Band of Gypsys"

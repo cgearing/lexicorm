@@ -1,4 +1,4 @@
-from behave import given, when, then
+from behave import given, when, then, step
 from hamcrest import assert_that, equal_to, has_entries
 
 from lexicorm.model_to_dict import model_to_dict
@@ -36,7 +36,24 @@ def get_dictionary_with_key(context, key, value):
 
 
 @given("I have a musician with a related band")
-def step_impl(context):
+def have_musician(context):
     fixtures = get_fixtures_with_relationship()
     context.musician = fixtures['musician']
     context.band = fixtures['band']
+
+
+@then('I get a dictionary with a key "{key}" that is a list')
+def get_dictionary(context, key):
+    assert_that(type(context.result[key]), equal_to(list))
+
+
+@step("""one of the objects in the '{object_name}'
+         list contains the key '{key}' with the value '{value}'""")
+def find_dict(context, object_name, key, value):
+    things = context.result[object_name]
+
+    for thing in things:
+        if key in thing:
+            if value is not None:
+                assert_that(thing[key].lower(), equal_to(value.lower()))
+            return
