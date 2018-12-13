@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Any
 
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.inspection import inspect
@@ -6,8 +6,10 @@ from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.orm.state import InstanceState
 
 
-def model_to_dict(sqlalchemy_model: DeclarativeMeta,
-                  get_lazy: bool = False) -> Dict:
+def model_to_dict(
+        sqlalchemy_model: DeclarativeMeta,
+        get_lazy: bool = False
+) -> Dict[str, Any]:
     """
     sqlalchemy_model: A SQLAlchemy model
     :returns q dictionary representation of the SQLAlchemy Model
@@ -16,15 +18,16 @@ def model_to_dict(sqlalchemy_model: DeclarativeMeta,
     if sqlalchemy_model is None:
         return {}
 
-    result: Dict = {}
     inspected = inspect(sqlalchemy_model)
 
     eager_relationships = _get_eager_relationships(inspected)
     lazy_relationships = _get_lazy_relationships(inspected)
 
-    result = {**_model_to_dict(inspected,
-                               lazy_keys=lazy_relationships,
-                               get_lazy=get_lazy)}
+    result: Dict[str, Any] = {
+        **_model_to_dict(inspected,
+                         lazy_keys=lazy_relationships,
+                         get_lazy=get_lazy)
+    }
 
     if not eager_relationships:
         rels = _hydrate_eager_relationships(inspected, eager_relationships)
@@ -36,10 +39,12 @@ def model_to_dict(sqlalchemy_model: DeclarativeMeta,
     return result
 
 
-def _model_to_dict(inspected_sqlalchemy_model: InstanceState,
-                   lazy_keys: List[str],
-                   get_lazy: bool = False) -> Dict:
-    result: Dict = {}
+def _model_to_dict(
+        inspected_sqlalchemy_model: InstanceState,
+        lazy_keys: List[str],
+        get_lazy: bool = False
+) -> Dict[str, Any]:
+    result: Dict[str, Any] = {}
     attrs = inspected_sqlalchemy_model.attrs
     for attr in attrs:
         if isinstance(attr.value, InstrumentedList):
@@ -53,7 +58,7 @@ def _model_to_dict(inspected_sqlalchemy_model: InstanceState,
 
 def _get_eager_relationships(
         inspected_sqlalchemy_model: InstanceState
-) -> List[DeclarativeMeta]:
+) -> List[str]:
     return [
         model[1].key for model
         in inspected_sqlalchemy_model.mapper.relationships._data.items()
@@ -63,7 +68,7 @@ def _get_eager_relationships(
 
 def _get_lazy_relationships(
         inspected_sqlalchemy_model: InstanceState
-) -> List[DeclarativeMeta]:
+) -> List[str]:
     return [
         model[1].key for model
         in inspected_sqlalchemy_model.mapper.relationships._data.items()
@@ -73,15 +78,15 @@ def _get_lazy_relationships(
 
 def _convert_model_list_to_dicts(
         model_list: List[InstanceState]
-) -> List[Dict]:
+) -> List[Dict[str, Any]]:
     return [model_to_dict(inspect(model)) for model in model_list]
 
 
 def _hydrate_eager_relationships(
         inspected_sqlalchemy_model: InstanceState,
-        eager_relationships: List[DeclarativeMeta]
-) -> Dict:
-    result: Dict = {}
+        eager_relationships: List[str]
+) -> Dict[str, Any]:
+    result: Dict[str, Any] = {}
     attrs = inspected_sqlalchemy_model.attrs
     for attr in attrs:
         if attr.key in eager_relationships:
