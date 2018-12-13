@@ -47,13 +47,11 @@ def get_dictionary(context, key):
     assert_that(type(context.result[key]), equal_to(list))
 
 
-@step("""one of the objects in the '{object_name}'
-         list contains the key '{key}' with the value '{value}'""")
+@step('one of the objects in the "{object_name}" list contains the key "{key}" with the value "{value}"')
 def find_dict(context, object_name, key, value):
-    things = context.result[object_name]
-
-    for thing in things:
-        if key in thing:
+    objects = context.result[object_name]
+    for object in objects:
+        if key in object:
             if value is not None:
-                assert_that(thing[key].lower(), equal_to(value.lower()))
+                assert_that(object[key].lower(), equal_to(value.lower()))
             return
