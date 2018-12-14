@@ -19,6 +19,15 @@ def model_dict_on_model(context, model_name):
     context.result = model_to_dict(model)
 
 
+@when(u'I call model_to_dict on the model "{model_name}" and get_lazy is true')
+def model_dict_on_model(context, model_name):
+    if model_name != 'None':
+        model = getattr(context, model_name)
+    else:
+        model = context.model
+    context.result = model_to_dict(model, get_lazy=True)
+
+
 @then(u'I get an empty dictionary as the result')
 def empty_dict(context):
     assert_that(context.result, equal_to({}))
@@ -42,9 +51,15 @@ def have_musician(context):
     context.band = fixtures['band']
 
 
-@then('I get a dictionary with a key "{key}" that is a list')
-def get_dictionary(context, key):
-    assert_that(type(context.result[key]), equal_to(list))
+@then('I get a dictionary with a key "{key}" that is a "{test_type}"')
+def get_dictionary(context, key, test_type):
+    type_mapping = {
+        'dict':    dict,
+        'list':    list,
+        'integer': int,
+        'string':  str,
+    }
+    assert_that(type(context.result[key]), equal_to(type_mapping[test_type]))
 
 
 @step('one of the objects in the "{object_name}" list contains the key "{key}" with the value "{value}"')
@@ -55,3 +70,4 @@ def find_dict(context, object_name, key, value):
             if value is not None:
                 assert_that(object[key].lower(), equal_to(value.lower()))
             return
+    raise Exception('No values in key')

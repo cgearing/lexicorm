@@ -58,14 +58,15 @@ def get_fixtures() -> Mapping[str, Union[Band, Musician]]:
 def get_fixtures_with_relationship() -> Mapping[str, Union[Band, Musician]]:
     fixtures = {}
 
-    band = Band(name='Band Of Gypsys', genre='Rock')
+    band1 = Band(name='Band Of Gypsys', genre='Rock')
+    band2 = Band(name='The Jimi Hendrix Experience', genre='Psychedelic Rock')
 
     musician = Musician(given_name='Jimi',
                         last_name='Hendrix',
                         instrument='Guitar',
-                        bands=[band])
+                        bands=[band1, band2])
 
-    session.add_all([band, musician])
+    session.add_all([band1, band2, musician])
     session.commit()
 
     fixtures['band'] = session.query(Band).first()

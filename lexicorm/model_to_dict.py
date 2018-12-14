@@ -29,7 +29,7 @@ def model_to_dict(
                          get_lazy=get_lazy)
     }
 
-    if not eager_relationships:
+    if eager_relationships:
         rels = _hydrate_eager_relationships(inspected, eager_relationships)
     else:
         rels = {}
