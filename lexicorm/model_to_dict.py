@@ -8,7 +8,8 @@ from sqlalchemy.orm.state import InstanceState
 
 def model_to_dict(
         sqlalchemy_model: DeclarativeMeta,
-        get_lazy: bool = False
+        get_lazy: bool = False,
+        return_immediately: bool = False,
 ) -> Dict[str, Any]:
     """
     sqlalchemy_model: A SQLAlchemy model
@@ -29,10 +30,16 @@ def model_to_dict(
                          get_lazy=get_lazy)
     }
 
+    if return_immediately is True:
+        return result
+
     if eager_relationships:
         rels = _hydrate_eager_relationships(inspected, eager_relationships)
     else:
         rels = {}
+
+    if get_lazy:
+        rels = _hydrate_lazy_relationships(inspected, lazy_relationships)
 
     result.update(rels)
 
@@ -92,3 +99,15 @@ def _hydrate_eager_relationships(
         if attr.key in eager_relationships:
             result[attr.key] = _convert_model_list_to_dicts(attr.value)
     return result
+
+
+def _hydrate_lazy_relationships(
+        inspected_sqlalchemy_model: InstanceState,
+        lazy_relationships: str,
+) -> Dict[str, Any]:
+    result: Dict[str, Any] = {}
+    for relationship in lazy_relationships:
+        result[relationship] =  model_to_dict(inspected_sqlalchemy_model.attrs[relationship].value,
+                                              return_immediately=True)
+    return result
+

@@ -23,5 +23,5 @@ Feature: model_to_dict
   Scenario: calling model_to_dict on a model with a lazy relationship and get_lazy is true
     Given I have a musician with a related band
     When I call model_to_dict on the model "band" and get_lazy is true
-    Then I get a dictionary with a key "musician" that is a "dict"
-     And the object has a key "given_name" with the value "Jimi"
+    Then I get a dictionary with a key "members" that is a "dict"
+     And the "members" object has a key "given_name" with the value "Jimi"

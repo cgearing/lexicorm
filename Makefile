@@ -1,12 +1,7 @@
-.PHONY: test-unit
-test-unit:
-	pipenv run pytest tests/unit data_pipeline --doctest-modules
+.PHONY: test
 
-test-behave:
+test:
 	pipenv run behave test/e2e --format=progress
-
-.PHONY:  test-unit test-behave
-test-local: test-unit test-behave
 
 .PHONY: lint pep8 pyflakes mypy
 lint: pep8 pyflakes mypy

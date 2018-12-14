@@ -71,3 +71,9 @@ def find_dict(context, object_name, key, value):
                 assert_that(object[key].lower(), equal_to(value.lower()))
             return
     raise Exception('No values in key')
+
+
+@step('the "{object_name}" object has a key "{key}" with the value "{value}"')
+def step_impl(context, object_name, key, value):
+    object_name = context.result[object_name]
+    assert_that(object_name[key].lower(), equal_to(value.lower()))
