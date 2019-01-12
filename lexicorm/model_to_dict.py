@@ -13,7 +13,7 @@ def model_to_dict(
 ) -> Dict[str, Any]:
     """
     sqlalchemy_model: A SQLAlchemy model
-    :returns q dictionary representation of the SQLAlchemy Model
+    :returns a dictionary representation of the SQLAlchemy Model
 
     """
     if sqlalchemy_model is None:
@@ -103,11 +103,11 @@ def _hydrate_eager_relationships(
 
 def _hydrate_lazy_relationships(
         inspected_sqlalchemy_model: InstanceState,
-        lazy_relationships: str,
+        lazy_relationships: List[str],
 ) -> Dict[str, Any]:
     result: Dict[str, Any] = {}
     for relationship in lazy_relationships:
-        result[relationship] =  model_to_dict(inspected_sqlalchemy_model.attrs[relationship].value,
-                                              return_immediately=True)
+        result[relationship] = model_to_dict(
+            inspected_sqlalchemy_model.attrs[relationship].value,
+            return_immediately=True)
     return result
-
