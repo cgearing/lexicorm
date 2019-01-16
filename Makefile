@@ -14,3 +14,13 @@ pyflakes:
 
 mypy:
 	pipenv run mypy --package lexicorm --strict --ignore-missing-imports
+
+deploy: deploy-clean deploy-build deploy-deploy
+
+deploy-clean:
+	rm -rf build/ dist/ genyrator.egg-info/
+deploy-build:
+	pipenv run python setup.py sdist bdist_wheel
+
+deploy-deploy:
+	pipenv run twine upload --repository-url https://test.pypi.org/legacy/ dist/*
