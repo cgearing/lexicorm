@@ -14,6 +14,7 @@ pylint = "*"
 mypy = "*"
 "flake8" = "*"
 pytest = "*"
+twine = "*"
 
 [requires]
 python_version = "3.7"

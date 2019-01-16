@@ -32,3 +32,9 @@ venv.bak/
 .idea
 .idea/
 .vscode
+
+*.pyc
+build/
+*.db
+/dist/
+/lexicorm.egg-info/
